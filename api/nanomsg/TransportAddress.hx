@@ -1,7 +1,7 @@
 package nanomsg;
 
-import std.NotImplementedException;
-import std.Stringable;
+import lib.NotImplementedException;
+import lib.Stringable;
 
 /**
  * @abstract

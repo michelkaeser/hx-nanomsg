@@ -6,7 +6,7 @@
     "description": "Haxe (C++/Neko) language bindings for the nanomsg library.",
     "classPath": "api",
     "dependencies": {
-        "std": ""
+        "lib": ""
     },
     "version": "0.0.0",
     "releasenote": "Starting a new era",
