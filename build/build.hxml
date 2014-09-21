@@ -1,0 +1,32 @@
+<xml>
+    <include name="${HXCPP}/build-tool/BuildCommon.xml" />
+    <include name="${HXCPP}/toolchain/linux-toolchain.xml" if="linux" />
+    <include name="${HXCPP}/toolchain/mac-toolchain.xml" if="macos" />
+    <include name="${HXCPP}/toolchain/cygwin-toolchain.xml" if="windows" />
+
+    <set name="HXCPP_CPP11" value="1" />
+
+    <!-- Define all source files that need to be compiled into the ndll -->
+    <files id="files">
+        <compilerflag value="-I./include" />
+
+        <file name="src/nanomsg-hx.cpp" />
+    </files>
+
+    <!-- define compiler build & linking target -->
+    <target id="libhxnanomsg.ndll" tool="linker" toolid="dll" output="libhxnanomsg">
+        <ext value=".ndll" />
+        <!-- ${BINDIR} substituted by hxcpp build tool for your platform e.g. "Windows", "Mac64" -->
+        <outdir name="ndll/${BINDIR}" />
+        <!-- specific previously deifned list of files to compile -->
+        <files id="files" />
+
+        <lib name="/usr/local/lib/libnanomsg.dylib" if="macos" />
+        <lib name="/usr/local/lib/libnanomsg.so" if="linux" />
+    </target>
+
+    <!-- specifies default hxcpp build tool target -->
+    <target id="default">
+        <target id="libhxnanomsg.ndll" />
+    </target>
+</xml>

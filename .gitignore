@@ -1,0 +1,7 @@
+# generated
+/bin
+/dist
+/ndll/**/*.ndll
+/obj
+/.temp
+/reports
