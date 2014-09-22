@@ -1,6 +1,7 @@
 # generated
 /bin
 /dist
+/docs/api
 /ndll/**/*.ndll
 /obj
 /.temp

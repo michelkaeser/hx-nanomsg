@@ -15,7 +15,7 @@
 
     <target name="build-bindings" depends="init" description="Builds the bindings">
         <echo>Compiling the source code...</echo>
-        <exec executable="haxelib" resultproperty="build.code">
+        <exec executable="haxelib" resultproperty="build-bindings.code">
             <arg value="run" />
             <arg value="hxcpp" />
             <arg value="${build}/build_bindings.hxml" />
