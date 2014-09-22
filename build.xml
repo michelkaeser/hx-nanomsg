@@ -13,20 +13,30 @@
         <mkdir dir="${reports}" />
     </target>
 
-    <target name="build" depends="init" description="Builds the bindings">
+    <target name="build-bindings" depends="init" description="Builds the bindings">
         <echo>Compiling the source code...</echo>
         <exec executable="haxelib" resultproperty="build.code">
             <arg value="run" />
             <arg value="hxcpp" />
-            <arg value="${build}/build.hxml" />
+            <arg value="${build}/build_bindings.hxml" />
             <arg value="-DHXCPP_M64" />
         </exec>
-        <condition property="build.failed">
-            <isfailure code="${build.code}" />
+        <condition property="build-bindings.failed">
+            <isfailure code="${build-bindings.code}" />
         </condition>
     </target>
 
-    <target name="cloc" depends="build" description="Counts the lines of code">
+    <target name="build-api" depends="build-bindings" description="Builds the API documentation">
+        <echo>Building the API documentation...</echo>
+        <exec executable="haxe" resultproperty="build-api.code">
+            <arg value="${build}/build_api.hxml" />
+        </exec>
+        <condition property="build-api.failed">
+            <isfailure code="${build-api.code}" />
+        </condition>
+    </target>
+
+    <target name="cloc" depends="build-api" description="Counts the lines of code">
         <echo>Counting lines of code...</echo>
         <exec executable="cloc">
             <arg value="--ignore-whitespace" />
@@ -52,7 +62,8 @@
     </target>
 
     <target name="exit" depends="cleanup" description="Marks the build as failed if one of the targets failed">
-        <fail if="build.failed">Build step failed. Check output log for more information.</fail>
+        <fail if="build-bindings.failed">Build step (bindings) failed. Check output log for more information.</fail>
+        <fail if="build-api.failed">Build step (API) failed. Check output log for more information.</fail>
         <echo>Everything went well. Good job!</echo>
     </target>
 </project>
