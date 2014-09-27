@@ -6,14 +6,34 @@
     <property name="api" location="${workspace}/api" />
     <property name="src" location="${workspace}/src" />
     <property name="build" location="${workspace}/build" />
-    <property name="reports"  location="${workspace}/reports" />
 
     <target name="init" description="Creates the directories needed to store output">
         <echo>Creating all required directories...</echo>
-        <mkdir dir="${reports}" />
+        <mkdir dir="${bin}" />
     </target>
 
-    <target name="build-bindings" depends="init" description="Builds the bindings">
+    <target name="dependencies" depends="init" description="Installs required dependencies">
+        <echo>Installing required dependencies...</echo>
+        <exec executable="haxelib">
+            <arg value="install" />
+            <arg value="hxcpp" />
+        </exec>
+        <exec executable="haxelib">
+            <arg value="install" />
+            <arg value="hxcs" />
+        </exec>
+        <exec executable="haxelib">
+            <arg value="install" />
+            <arg value="hxjava" />
+        </exec>
+        <!--<exec executable="haxelib">
+            <arg value="git" />
+            <arg value="lib" />
+            <arg value="git@git.rackster.ch:MaddinXx/hx-lib.git" />
+        </exec>-->
+    </target>
+
+    <target name="build-bindings" depends="dependencies" description="Builds the bindings">
         <echo>Compiling the source code...</echo>
         <exec executable="haxelib" resultproperty="build-bindings.code">
             <arg value="run" />
@@ -36,29 +56,9 @@
         </condition>
     </target>
 
-    <target name="cloc" depends="build-api" description="Counts the lines of code">
-        <echo>Counting lines of code...</echo>
-        <exec executable="cloc">
-            <arg value="--ignore-whitespace" />
-            <arg value="--read-lang-def=/usr/share/cloc/defs/haxe.txt" />
-            <arg value="--by-file" />
-            <arg value="--xml" />
-            <arg value="-out=${reports}/cloc.xml" />
-            <arg value="${api}" />
-            <arg value="${src}" />
-        </exec>
-
-        <exec executable="xsltproc">
-            <arg value="-o" />
-            <arg value="${reports}/sloccount.sc" />
-            <arg value="/usr/share/cloc/cloc2sloccount.xsl" />
-            <arg value="${reports}/cloc.xml" />
-        </exec>
-    </target>
-
-    <target name="cleanup" depends="cloc" description="Removes compiled files and directories">
+    <target name="cleanup" depends="build-api" description="Removes compiled files and directories">
         <echo>Removing (temporary) directories...</echo>
-        <delete dir="${workspace}/.temp" />
+        <delete dir="${bin}" />
     </target>
 
     <target name="exit" depends="cleanup" description="Marks the build as failed if one of the targets failed">
