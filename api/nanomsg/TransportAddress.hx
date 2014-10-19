@@ -1,7 +1,7 @@
 package nanomsg;
 
-import lib.NotImplementedException;
-import lib.Stringable;
+import hext.NotImplementedException;
+import hext.Stringable;
 
 /**
  * @abstract
@@ -33,6 +33,6 @@ class TransportAddress implements Stringable
      */
     public function toString():String
     {
-        throw new NotImplementedException("Method toString() not implemented in abstract class TransportAddress");
+        throw new NotImplementedException("Method toString() not implemented in abstract class TransportAddress.");
     }
 }

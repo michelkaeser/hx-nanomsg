@@ -28,8 +28,8 @@
         </exec>
         <!--<exec executable="haxelib">
             <arg value="git" />
-            <arg value="lib" />
-            <arg value="git@git.rackster.ch:MaddinXx/hx-lib.git" />
+            <arg value="hext-core" />
+            <arg value="git@git.rackster.ch:MaddinXx/hext-core.git" />
         </exec>-->
     </target>
 

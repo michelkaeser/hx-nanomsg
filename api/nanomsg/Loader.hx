@@ -5,9 +5,9 @@ package nanomsg;
 #elseif neko
     import neko.Lib;
 #else
-    #error "The nanomsg library is only available on C++ and Neko targets"
+    #error "The nanomsg library is only available on C++ and Neko targets."
 #end
-import lib.Error;
+import hext.Error;
 
 /**
  * Haxe FFI loaded class.
@@ -46,7 +46,7 @@ class Loader
      *
      * @return Dynamic
      *
-     * @throws lib.Error if the function could not be loaded
+     * @throws hext.Error if the function could not be loaded
      */
     public static function load(fn:String, nargs:Int):Dynamic
     {

@@ -2,9 +2,9 @@ package nanomsg;
 
 import haxe.io.Bytes;
 import haxe.io.BytesData;
-import lib.Closure;
-import lib.IllegalArgumentException;
-import lib.IllegalStateException;
+import hext.Closure;
+import hext.IllegalArgumentException;
+import hext.IllegalStateException;
 import nanomsg.Loader;
 import nanomsg.NanoDomain;
 import nanomsg.NanoException;
@@ -14,7 +14,7 @@ import nanomsg.NanoOption;
 import nanomsg.NanoProtocol;
 import nanomsg.TransportAddress;
 
-using lib.ArrayTools;
+using hext.ArrayTools;
 
 /**
  * Wrapper class around the native nanomsg functions provided through the Haxe C FFI:
@@ -80,8 +80,8 @@ class NanoSocket
      *
      * @return nanomsg.NanoSocket.Connection the opened Connection
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function bind(address:TransportAddress):Connection
     {
@@ -105,8 +105,8 @@ class NanoSocket
      * @param Bool force if true sets NN_LINGER to 0 so no tries are made to deliver outstanding
      * messages before the socket is closed
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function close(force:Bool = false):Void
     {
@@ -137,8 +137,8 @@ class NanoSocket
      *
      * @return nanomsg.NanoSocket.Connection the connection ID
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function connect(address:TransportAddress):Connection
     {
@@ -162,8 +162,8 @@ class NanoSocket
      * @param nanomsg.NanoSocket x the first socket to link
      * @param nanomsg.NanoSocket x the second socket to link
      *
-     * @throws lib.IllegalStateException if one of the instances has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if one of the instances has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public static function device(x:NanoSocket, y:NanoSocket):Void
     {
@@ -186,8 +186,8 @@ class NanoSocket
      *
      * @return Int the option's value
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function getOption(level:NanoLevel, option:NanoOption):Int
     {
@@ -282,9 +282,9 @@ class NanoSocket
      *
      * @return haxe.io.Bytes the read Bytes
      *
-     * @throws lib.IllegalArgumentException if the number of bytes to read is negative
-     * @throws lib.IllegalStateException    if the instance has already been cleaned up
-     * @throws nanomsg.NanoException        if the FFI call raises an error
+     * @throws hext.IllegalArgumentException if the number of bytes to read is negative
+     * @throws hext.IllegalStateException    if the instance has already been cleaned up
+     * @throws nanomsg.NanoException         if the FFI call raises an error
      */
     public function read(nbytes:Int, flags:NanoFlag = NanoFlag.NONE):Bytes
     {
@@ -318,8 +318,8 @@ class NanoSocket
      *
      * @return haxe.io.Bytes the read Bytes
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function readAll(flags:NanoFlag = NanoFlag.NONE):Bytes
     {
@@ -343,8 +343,8 @@ class NanoSocket
      *
      * @return nanomsg.NanoSocket this instance
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function setOption(level:NanoLevel, option:NanoOption, value:Dynamic):NanoSocket
     {
@@ -366,8 +366,8 @@ class NanoSocket
      *
      * @param nanomsg.NanoSocket.Connection cnx the Connection to shutdown
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function shutdown(cnx:Connection):Void
     {
@@ -402,8 +402,8 @@ class NanoSocket
      *
      * @return Int the number of written bytes
      *
-     * @throws lib.IllegalStateException if the instance has already been cleaned up
-     * @throws nanomsg.NanoException     if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function write(bytes:Null<Bytes>, flags:NanoFlag = NanoFlag.NONE):Int
     {

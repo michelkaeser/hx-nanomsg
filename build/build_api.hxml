@@ -1,8 +1,7 @@
 # C++
---next
 -cp  api
 -cpp bin/cpp
--lib lib
+-lib hext-core
 -xml bin/cpp.xml
 --macro "include('nanomsg')"
 --no-output
@@ -11,7 +10,7 @@
 --next
 -cp   api
 -neko bin/main.n
--lib  lib
+-lib  hext-core
 -xml  bin/neko.xml
 --macro "include('nanomsg')"
 --no-output
