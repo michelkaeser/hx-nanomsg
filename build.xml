@@ -4,6 +4,7 @@
     <property environment="env" />
     <property name="workspace" location="${env.WORKSPACE}" />
     <property name="api" location="${workspace}/api" />
+    <property name="bin" location="${workspace}/bin" />
     <property name="src" location="${workspace}/src" />
     <property name="build" location="${workspace}/build" />
 
