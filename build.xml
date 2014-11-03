@@ -19,14 +19,6 @@
             <arg value="install" />
             <arg value="hxcpp" />
         </exec>
-        <exec executable="haxelib">
-            <arg value="install" />
-            <arg value="hxcs" />
-        </exec>
-        <exec executable="haxelib">
-            <arg value="install" />
-            <arg value="hxjava" />
-        </exec>
         <!--<exec executable="haxelib">
             <arg value="git" />
             <arg value="hext-core" />

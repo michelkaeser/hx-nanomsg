@@ -1,12 +1,12 @@
 package nanomsg;
 
 import hext.NotImplementedException;
-import hext.Stringable;
+import hext.IStringable;
 
 /**
  * @abstract
  */
-class TransportAddress implements Stringable
+class TransportAddress implements IStringable
 {
     /**
      * Stores the address to be used.
