@@ -14,6 +14,7 @@
 #include <nanomsg/inproc.h>
 #include <nanomsg/ipc.h>
 #include <nanomsg/tcp.h>
+#include <nanomsg/ws.h>
 
 #include "nanomsg-hx.hpp"
 

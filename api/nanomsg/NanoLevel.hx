@@ -10,6 +10,7 @@ abstract NanoLevel(Int) from Int to Int
     var INPROC     = -1;
     var IPC        = -2;
     var TCP        = -3;
+    var WS         = -4;
 
     // generic socket-level
     var SOL_SOCKET = 0;
