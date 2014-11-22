@@ -19,11 +19,10 @@
             <arg value="install" />
             <arg value="hxcpp" />
         </exec>
-        <!--<exec executable="haxelib">
-            <arg value="git" />
+        <exec executable="haxelib">
+            <arg value="install" />
             <arg value="hext-core" />
-            <arg value="git@git.rackster.ch:MaddinXx/hext-core.git" />
-        </exec>-->
+        </exec>
     </target>
 
     <target name="build-bindings" depends="dependencies" description="Builds the bindings">
