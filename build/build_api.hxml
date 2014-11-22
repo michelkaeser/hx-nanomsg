@@ -1,0 +1,19 @@
+# C++
+-cp  api
+-cpp bin/cpp
+-lib hext-core
+-xml bin/cpp.xml
+--macro "include('nanomsg')"
+--no-output
+
+# Neko
+--next
+-cp   api
+-neko bin/main.n
+-lib  hext-core
+-xml  bin/neko.xml
+--macro "include('nanomsg')"
+--no-output
+
+--next
+-cmd haxelib run dox -o docs/api -i bin -in "^nanomsg.*" --title "hx-nanomsg"

@@ -4,55 +4,58 @@
     <property environment="env" />
     <property name="workspace" location="${env.WORKSPACE}" />
     <property name="api" location="${workspace}/api" />
+    <property name="bin" location="${workspace}/bin" />
     <property name="src" location="${workspace}/src" />
     <property name="build" location="${workspace}/build" />
-    <property name="reports"  location="${workspace}/reports" />
 
     <target name="init" description="Creates the directories needed to store output">
         <echo>Creating all required directories...</echo>
-        <mkdir dir="${reports}" />
+        <mkdir dir="${bin}" />
     </target>
 
-    <target name="build" depends="init" description="Builds the bindings">
+    <target name="dependencies" depends="init" description="Installs required dependencies">
+        <echo>Installing required dependencies...</echo>
+        <exec executable="haxelib">
+            <arg value="install" />
+            <arg value="hxcpp" />
+        </exec>
+        <exec executable="haxelib">
+            <arg value="install" />
+            <arg value="hext-core" />
+        </exec>
+    </target>
+
+    <target name="build-bindings" depends="dependencies" description="Builds the bindings">
         <echo>Compiling the source code...</echo>
-        <exec executable="haxelib" resultproperty="build.code">
+        <exec executable="haxelib" resultproperty="build-bindings.code">
             <arg value="run" />
             <arg value="hxcpp" />
-            <arg value="${build}/build.hxml" />
+            <arg value="${build}/build_bindings.hxml" />
             <arg value="-DHXCPP_M64" />
         </exec>
-        <condition property="build.failed">
-            <isfailure code="${build.code}" />
+        <condition property="build-bindings.failed">
+            <isfailure code="${build-bindings.code}" />
         </condition>
     </target>
 
-    <target name="cloc" depends="build" description="Counts the lines of code">
-        <echo>Counting lines of code...</echo>
-        <exec executable="cloc">
-            <arg value="--ignore-whitespace" />
-            <arg value="--read-lang-def=/usr/share/cloc/defs/haxe.txt" />
-            <arg value="--by-file" />
-            <arg value="--xml" />
-            <arg value="-out=${reports}/cloc.xml" />
-            <arg value="${api}" />
-            <arg value="${src}" />
+    <target name="build-api" depends="build-bindings" description="Builds the API documentation">
+        <echo>Building the API documentation...</echo>
+        <exec executable="haxe" resultproperty="build-api.code">
+            <arg value="${build}/build_api.hxml" />
         </exec>
-
-        <exec executable="xsltproc">
-            <arg value="-o" />
-            <arg value="${reports}/sloccount.sc" />
-            <arg value="/usr/share/cloc/cloc2sloccount.xsl" />
-            <arg value="${reports}/cloc.xml" />
-        </exec>
+        <condition property="build-api.failed">
+            <isfailure code="${build-api.code}" />
+        </condition>
     </target>
 
-    <target name="cleanup" depends="cloc" description="Removes compiled files and directories">
+    <target name="cleanup" depends="build-api" description="Removes compiled files and directories">
         <echo>Removing (temporary) directories...</echo>
-        <delete dir="${workspace}/.temp" />
+        <delete dir="${bin}" />
     </target>
 
     <target name="exit" depends="cleanup" description="Marks the build as failed if one of the targets failed">
-        <fail if="build.failed">Build step failed. Check output log for more information.</fail>
+        <fail if="build-bindings.failed">Build step (bindings) failed. Check output log for more information.</fail>
+        <fail if="build-api.failed">Build step (API) failed. Check output log for more information.</fail>
         <echo>Everything went well. Good job!</echo>
     </target>
 </project>

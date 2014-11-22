@@ -307,7 +307,7 @@ value hx_nn_socket(value domain, value protocol)
 DEFINE_PRIM(hx_nn_socket, 2);
 
 
-value hx_nn_term()
+value hx_nn_term(void)
 {
     nn_term();
     return alloc_null();

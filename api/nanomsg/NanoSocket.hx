@@ -2,6 +2,11 @@ package nanomsg;
 
 import haxe.io.Bytes;
 import haxe.io.BytesData;
+import hext.Closure;
+import hext.IllegalArgumentException;
+import hext.IllegalStateException;
+import hext.ds.IList;
+import hext.ds.LinkedList;
 import nanomsg.Loader;
 import nanomsg.NanoDomain;
 import nanomsg.NanoException;
@@ -9,12 +14,8 @@ import nanomsg.NanoFlag;
 import nanomsg.NanoLevel;
 import nanomsg.NanoOption;
 import nanomsg.NanoProtocol;
-import nanomsg.TransportAddress;
-import std.Closure;
-import std.IllegalArgumentException;
-import std.IllegalStateException;
 
-using std.ArrayTools;
+using hext.ArrayTools;
 
 /**
  * Wrapper class around the native nanomsg functions provided through the Haxe C FFI:
@@ -43,25 +44,25 @@ class NanoSocket
     /**
      * Stores the underlaying libnanomsg Socket.
      *
-     * @var Null<hxnn.NanoSocket.Socket>;
+     * @var Null<nanomsg.NanoSocket.Socket>;
      */
     private var handle:Null<Socket>;
 
     /**
      * Stores the Connections the Socket has been binded/connected to.
      *
-     * @var Array<hxnn.NanoSocket.Connection>
+     * @var hext.ds.IList<nanomsg.NanoSocket.Connection>
      */
-    private var conns:Array<Connection>;
+    private var conns:IList<Connection>;
 
 
     /**
      * Constructor to initialize a new NanoSocket instance.
      *
-     * @param hxnn.NanoDomain   domain the domain type to use
-     * @param hxnn.NanoProtocol protocol the protocol to use
+     * @param nanomsg.NanoDomain   domain the domain type to use
+     * @param nanomsg.NanoProtocol protocol the protocol to use
      *
-     * @throws hxnn.NanoException if the socket initialization fails
+     * @throws nanomsg.NanoException if the socket initialization fails
      */
     public function new(domain:NanoDomain, protocol:NanoProtocol):Void
     {
@@ -70,28 +71,28 @@ class NanoSocket
         } catch (ex:Dynamic) {
             throw new NanoException(ex);
         }
-        this.conns = new Array<Connection>();
+        this.conns = new LinkedList<Connection>();
     }
 
     /**
      * Binds the Socket to the given address.
      *
-     * @param hxnn.TransportAddress address the address to bind to
+     * @param nanomsg.NanoAddress address the address to bind to
      *
-     * @return hxnn.NanoSocket.Connection the opened Connection
+     * @return nanomsg.NanoSocket.Connection the opened Connection
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
-    public function bind(address:TransportAddress):Connection
+    public function bind(address:NanoAddress):Connection
     {
         if (this.handle == null) {
             throw new IllegalStateException("NanoSocket not available");
         }
 
         try {
-            var cnx:Connection = NanoSocket._bind(this.handle, address.toString()) /* < 0? */;
-            this.conns.push(cnx);
+            var cnx:Connection = NanoSocket._bind(this.handle, address) /* < 0? */;
+            this.conns.add(cnx);
 
             return cnx;
         } catch (ex:Dynamic) {
@@ -105,8 +106,8 @@ class NanoSocket
      * @param Bool force if true sets NN_LINGER to 0 so no tries are made to deliver outstanding
      * messages before the socket is closed
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function close(force:Bool = false):Void
     {
@@ -117,7 +118,6 @@ class NanoSocket
         if (force) {
             this.setOption(NanoLevel.SOL_SOCKET, NanoOption.LINGER, 0);
         }
-
         for (cnx in Lambda.array(this.conns)) { // make sure we iterate over copy
             this.shutdown(cnx);
         }
@@ -133,22 +133,22 @@ class NanoSocket
     /**
      * Connects to the given TransportAddress.
      *
-     * @param hxnn.TransportAddress address the address to connect to
+     * @param nanomsg.NanoAddress address the address to connect to
      *
-     * @return hxnn.NanoSocket.Connection the connection ID
+     * @return nanomsg.NanoSocket.Connection the connection ID
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
-    public function connect(address:TransportAddress):Connection
+    public function connect(address:NanoAddress):Connection
     {
         if (this.handle == null) {
             throw new IllegalStateException("NanoSocket not available");
         }
 
         try {
-            var cnx:Connection = NanoSocket._connect(this.handle, address.toString()) /* < 0? */;
-            this.conns.push(cnx);
+            var cnx:Connection = NanoSocket._connect(this.handle, address) /* < 0? */;
+            this.conns.add(cnx);
 
             return cnx;
         } catch (ex:Dynamic) {
@@ -159,11 +159,11 @@ class NanoSocket
     /**
      * Starts a device to forward messages between two sockets.
      *
-     * @param hxnn.NanoSocket x the first socket to link
-     * @param hxnn.NanoSocket x the second socket to link
+     * @param nanomsg.NanoSocket x the first socket to link
+     * @param nanomsg.NanoSocket x the second socket to link
      *
-     * @throws hxstd.IllegalStateException if one of the instances has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if one of the instances has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public static function device(x:NanoSocket, y:NanoSocket):Void
     {
@@ -181,13 +181,13 @@ class NanoSocket
     /**
      * Returns the value of the given option.
      *
-     * @param hxnn.NanoLevel  level  the level on which the option is valid
-     * @param hxnn.NanoOption option the option to get the value for
+     * @param nanomsg.NanoLevel  level  the level on which the option is valid
+     * @param nanomsg.NanoOption option the option to get the value for
      *
      * @return Int the option's value
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function getOption(level:NanoLevel, option:NanoOption):Int
     {
@@ -205,11 +205,11 @@ class NanoSocket
     /**
      * Polls a set of SP sockets for readability and/or writability.
      *
-     * @param Null<Array<hxnn.NanoSocket>> reads  NanoSocket to observ for readability
-     * @param Null<Array<hxnn.NanoSocket>> writes NanoSocket to observ for writability
-     * @param Null<Array<hxnn.NanoSocket>> boths  NanoSocket to observ for readability or writability
+     * @param Null<Array<nanomsg.NanoSocket>> reads  NanoSocket to observ for readability
+     * @param Null<Array<nanomsg.NanoSocket>> writes NanoSocket to observ for writability
+     * @param Null<Array<nanomsg.NanoSocket>> boths  NanoSocket to observ for readability or writability
      *
-     * @return Array<Array<NanoSocket>> where [0] are the sockets to read and [1] to write
+     * @return Array<Array<nanomsg.NanoSocket>> where [0] are the sockets to read and [1] to write
      */
     public static function poll(reads:Null<Array<NanoSocket>>, writes:Null<Array<NanoSocket>>, timeout:Float = 0.2):Array<Array<NanoSocket>>
     {
@@ -217,7 +217,6 @@ class NanoSocket
         var rhandles:Array<Null<Socket>>;
         var whandles:Array<Null<Socket>>;
         var bhandles:Array<Socket>;
-
         if (reads == null || reads.length == 0) {
             rhandles = new Array<Socket>();
         } else {
@@ -277,14 +276,14 @@ class NanoSocket
      *
      * If the 'DONTWAIT' flag is passed, the action will be performed in non-blocking mode.
      *
-     * @param Int           nbytes the number of bytes to read
-     * @param hxnn.NanoFlag flags  flags defining how to receive the message
+     * @param Int              nbytes the number of bytes to read
+     * @param nanomsg.NanoFlag flags  flags defining how to receive the message
      *
      * @return haxe.io.Bytes the read Bytes
      *
-     * @throws hxstd.IllegalArgumentException if the number of bytes to read is negative
-     * @throws hxstd.IllegalStateException    if the instance has already been cleaned up
-     * @throws hxnn.NanoException             if the FFI call raises an error
+     * @throws hext.IllegalArgumentException if the number of bytes to read is negative
+     * @throws hext.IllegalStateException    if the instance has already been cleaned up
+     * @throws nanomsg.NanoException         if the FFI call raises an error
      */
     public function read(nbytes:Int, flags:NanoFlag = NanoFlag.NONE):Bytes
     {
@@ -314,12 +313,12 @@ class NanoSocket
      *
      * If the 'DONTWAIT' flag is passed, the action will be performed in non-blocking mode.
      *
-     * @param hxnn.NanoFlag flags flags defining how to receive the message
+     * @param nanomsg.NanoFlag flags flags defining how to receive the message
      *
      * @return haxe.io.Bytes the read Bytes
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function readAll(flags:NanoFlag = NanoFlag.NONE):Bytes
     {
@@ -337,14 +336,14 @@ class NanoSocket
     /**
      * Sets the value of the given option.
      *
-     * @param hxnn.NanoLevel  level  the level on which the option is valid
-     * @param hxnn.NanoOption option the option to set the value for
-     * @param Dynamic         value  the value to set for the option
+     * @param nanomsg.NanoLevel  level  the level on which the option is valid
+     * @param nanomsg.NanoOption option the option to set the value for
+     * @param Dynamic            value  the value to set for the option
      *
-     * @return hxnn.NanoSocket this instance
+     * @return nanomsg.NanoSocket this instance
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function setOption(level:NanoLevel, option:NanoOption, value:Dynamic):NanoSocket
     {
@@ -364,10 +363,10 @@ class NanoSocket
     /**
      * Closes the open Connection and removes it from the Socket.
      *
-     * @param hxnn.NanoSocket.Connection cnx the Connection to shutdown
+     * @param nanomsg.NanoSocket.Connection cnx the Connection to shutdown
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function shutdown(cnx:Connection):Void
     {
@@ -398,12 +397,12 @@ class NanoSocket
      * If the 'DONTWAIT' flag is passed, the action will be performed in non-blocking mode.
      *
      * @param Null<haxe.io.Bytes> bytes the Bytes to send
-     * @param hxnn.NanoFlag       flags flags defining how to send the message
+     * @param nanomsg.NanoFlag    flags flags defining how to send the message
      *
      * @return Int the number of written bytes
      *
-     * @throws hxstd.IllegalStateException if the instance has already been cleaned up
-     * @throws hxnn.NanoException          if the FFI call raises an error
+     * @throws hext.IllegalStateException if the instance has already been cleaned up
+     * @throws nanomsg.NanoException      if the FFI call raises an error
      */
     public function write(bytes:Null<Bytes>, flags:NanoFlag = NanoFlag.NONE):Int
     {
@@ -432,7 +431,7 @@ class NanoSocket
  *
  * Connections are nothing other than Ints (file descriptors).
  */
- private extern class Connection {}
+extern class Connection {}
 
 /**
  * Extern for nanomsg sockets.

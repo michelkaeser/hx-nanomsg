@@ -295,7 +295,7 @@ value hx_nn_socket(value domain, value protocol);
  * Returns:
  *   value[null] nothing is returned
  */
-value hx_nn_term();
+value hx_nn_term(void);
 
 #ifdef __cplusplus
 } // extern "C"
