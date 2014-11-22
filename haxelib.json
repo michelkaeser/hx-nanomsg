@@ -6,10 +6,10 @@
     "description": "Haxe (C++/Neko) language bindings for the nanomsg library.",
     "classPath": "api",
     "dependencies": {
-        "hext-core": ""
+        "hext-core": "1.0.0-alpha"
     },
-    "version": "0.0.0",
-    "releasenote": "Starting a new era",
+    "version": "1.0.0-alpha",
+    "releasenote": "First haxelib release.",
     "contributors": [
         "MaddinXx"
     ]
