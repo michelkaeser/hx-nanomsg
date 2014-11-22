@@ -76,21 +76,21 @@ class NanoSocket
     /**
      * Binds the Socket to the given address.
      *
-     * @param nanomsg.TransportAddress address the address to bind to
+     * @param nanomsg.NanoAddress address the address to bind to
      *
      * @return nanomsg.NanoSocket.Connection the opened Connection
      *
      * @throws hext.IllegalStateException if the instance has already been cleaned up
      * @throws nanomsg.NanoException      if the FFI call raises an error
      */
-    public function bind(address:TransportAddress):Connection
+    public function bind(address:NanoAddress):Connection
     {
         if (this.handle == null) {
             throw new IllegalStateException("NanoSocket not available");
         }
 
         try {
-            var cnx:Connection = NanoSocket._bind(this.handle, address.toString()) /* < 0? */;
+            var cnx:Connection = NanoSocket._bind(this.handle, address) /* < 0? */;
             this.conns.push(cnx);
 
             return cnx;
@@ -133,21 +133,21 @@ class NanoSocket
     /**
      * Connects to the given TransportAddress.
      *
-     * @param nanomsg.TransportAddress address the address to connect to
+     * @param nanomsg.NanoAddress address the address to connect to
      *
      * @return nanomsg.NanoSocket.Connection the connection ID
      *
      * @throws hext.IllegalStateException if the instance has already been cleaned up
      * @throws nanomsg.NanoException      if the FFI call raises an error
      */
-    public function connect(address:TransportAddress):Connection
+    public function connect(address:NanoAddress):Connection
     {
         if (this.handle == null) {
             throw new IllegalStateException("NanoSocket not available");
         }
 
         try {
-            var cnx:Connection = NanoSocket._connect(this.handle, address.toString()) /* < 0? */;
+            var cnx:Connection = NanoSocket._connect(this.handle, address) /* < 0? */;
             this.conns.push(cnx);
 
             return cnx;
@@ -432,7 +432,7 @@ class NanoSocket
  *
  * Connections are nothing other than Ints (file descriptors).
  */
- private extern class Connection {}
+public extern class Connection {}
 
 /**
  * Extern for nanomsg sockets.

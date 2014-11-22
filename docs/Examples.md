@@ -13,7 +13,7 @@ class Debug
         /* NN_PAIR */
         var s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PAIR);
         var s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PAIR);
-        var addr = new InProcAddress("hxnn");
+        var addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr);
 
@@ -28,7 +28,7 @@ class Debug
         /* NN_REQREP */
         s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.REQ);
         s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.REP);
-        addr = new InProcAddress("hxnn");
+        addr = "inproc://hxnn";
 
         s2.bind(addr); s1.connect(addr);
         // s1.setOption(NanoLevel.REQ, NanoOption.REQ_RESEND_IVL, 5); // wait 5sec for reply before resending
@@ -45,7 +45,7 @@ class Debug
         s1     = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PUB);
         s2     = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.SUB);
         var s3 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.SUB);
-        addr   = new InProcAddress("hxnn");
+        addr   = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr); s3.connect(addr);
         s2.setOption(NanoLevel.SUB, NanoOption.SUB_SUBSCRIBE, ""); // subscribe to all messages
@@ -62,7 +62,7 @@ class Debug
         /* SURVEY */
         s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.SURVEYOR);
         s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.RESPONDENT);
-        addr = new InProcAddress("hxnn");
+        addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr);
         s1.setOption(NanoLevel.SURVEYOR, NanoOption.SURVEYOR_DEADLINE, 500); // wait half a second for votes
@@ -79,7 +79,7 @@ class Debug
         s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PUSH);
         s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PULL);
         s3 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.PULL);
-        addr = new InProcAddress("hxnn");
+        addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr); s3.connect(addr);
 
@@ -97,7 +97,7 @@ class Debug
         s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
         s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
         s3 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
-        addr = new InProcAddress("hxnn");
+        addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr); s3.connect(addr);
 
@@ -113,7 +113,7 @@ class Debug
         s1 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
         s2 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
         s3 = new NanoSocket(NanoDomain.AF_SP, NanoProtocol.BUS);
-        addr = new InProcAddress("hxnn");
+        addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr); s3.connect(addr);
 
