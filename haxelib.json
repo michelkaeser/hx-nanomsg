@@ -1,6 +1,6 @@
 {
     "name": "nanomsg",
-    "url" : "https://github.com/MaddinXx/hx-nanomsg",
+    "url" : "https://github.com/michelkaeser/hx-nanomsg",
     "license": "MIT",
     "tags": ["zeromq", "nanomsg", "socket", "communication", "ipc", "neko", "cpp"],
     "description": "Haxe (C++/Neko) language bindings for the nanomsg library.",
