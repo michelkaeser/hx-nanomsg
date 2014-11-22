@@ -5,6 +5,8 @@ import haxe.io.BytesData;
 import hext.Closure;
 import hext.IllegalArgumentException;
 import hext.IllegalStateException;
+import hext.ds.IList;
+import hext.ds.LinkedList;
 import nanomsg.Loader;
 import nanomsg.NanoDomain;
 import nanomsg.NanoException;
@@ -12,7 +14,6 @@ import nanomsg.NanoFlag;
 import nanomsg.NanoLevel;
 import nanomsg.NanoOption;
 import nanomsg.NanoProtocol;
-import nanomsg.TransportAddress;
 
 using hext.ArrayTools;
 
@@ -50,9 +51,9 @@ class NanoSocket
     /**
      * Stores the Connections the Socket has been binded/connected to.
      *
-     * @var Array<nanomsg.NanoSocket.Connection>
+     * @var hext.ds.IList<nanomsg.NanoSocket.Connection>
      */
-    private var conns:Array<Connection>;
+    private var conns:IList<Connection>;
 
 
     /**
@@ -70,7 +71,7 @@ class NanoSocket
         } catch (ex:Dynamic) {
             throw new NanoException(ex);
         }
-        this.conns = new Array<Connection>();
+        this.conns = new LinkedList<Connection>();
     }
 
     /**
@@ -91,7 +92,7 @@ class NanoSocket
 
         try {
             var cnx:Connection = NanoSocket._bind(this.handle, address) /* < 0? */;
-            this.conns.push(cnx);
+            this.conns.add(cnx);
 
             return cnx;
         } catch (ex:Dynamic) {
@@ -117,7 +118,6 @@ class NanoSocket
         if (force) {
             this.setOption(NanoLevel.SOL_SOCKET, NanoOption.LINGER, 0);
         }
-
         for (cnx in Lambda.array(this.conns)) { // make sure we iterate over copy
             this.shutdown(cnx);
         }
@@ -148,7 +148,7 @@ class NanoSocket
 
         try {
             var cnx:Connection = NanoSocket._connect(this.handle, address) /* < 0? */;
-            this.conns.push(cnx);
+            this.conns.add(cnx);
 
             return cnx;
         } catch (ex:Dynamic) {
@@ -217,7 +217,6 @@ class NanoSocket
         var rhandles:Array<Null<Socket>>;
         var whandles:Array<Null<Socket>>;
         var bhandles:Array<Socket>;
-
         if (reads == null || reads.length == 0) {
             rhandles = new Array<Socket>();
         } else {
@@ -432,7 +431,7 @@ class NanoSocket
  *
  * Connections are nothing other than Ints (file descriptors).
  */
-public extern class Connection {}
+extern class Connection {}
 
 /**
  * Extern for nanomsg sockets.
