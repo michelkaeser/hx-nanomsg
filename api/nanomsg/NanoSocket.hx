@@ -16,6 +16,7 @@ import nanomsg.NanoOption;
 import nanomsg.NanoProtocol;
 
 using hext.ArrayTools;
+using hext.IterableTools;
 
 /**
  * Wrapper class around the native nanomsg functions provided through the Haxe C FFI:
@@ -118,7 +119,7 @@ class NanoSocket
         if (force) {
             this.setOption(NanoLevel.SOL_SOCKET, NanoOption.LINGER, 0);
         }
-        for (cnx in Lambda.array(this.conns)) { // make sure we iterate over copy
+        for (cnx in this.conns.toList()) { // make sure we iterate over copy
             this.shutdown(cnx);
         }
 
