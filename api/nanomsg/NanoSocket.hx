@@ -5,8 +5,6 @@ import haxe.io.BytesData;
 import hext.Closure;
 import hext.IllegalArgumentException;
 import hext.IllegalStateException;
-import hext.ds.IList;
-import hext.ds.LinkedList;
 import nanomsg.Loader;
 import nanomsg.NanoDomain;
 import nanomsg.NanoException;
@@ -52,9 +50,9 @@ class NanoSocket
     /**
      * Stores the Connections the Socket has been binded/connected to.
      *
-     * @var hext.ds.IList<nanomsg.NanoSocket.Connection>
+     * @var List<nanomsg.NanoSocket.Connection>
      */
-    private var conns:IList<Connection>;
+    @:final private var conns:List<Connection>;
 
 
     /**
@@ -72,7 +70,7 @@ class NanoSocket
         } catch (ex:Dynamic) {
             throw new NanoException(ex);
         }
-        this.conns = new LinkedList<Connection>();
+        this.conns = new List<Connection>();
     }
 
     /**
