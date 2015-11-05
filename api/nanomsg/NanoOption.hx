@@ -22,17 +22,19 @@ abstract NanoOption(Int) from Int to Int
     var PROTOCOL          = 13;
     var IPV4ONLY          = 14;
     var SOCKET_NAME       = 15;
+    var RCVMAXSIZE        = 16;
 
     // TCP protocol options
-    var TCP_NODELAY = 1;
+    var TCP_NODELAY    = 1;
+    var TCPMUX_NODELAY = 1;
 
-    // http://nanomsg.org/v0.4/nn_reqrep.7.html
+    // http://nanomsg.org/v0.7/nn_reqrep.7.html
     var REQ_RESEND_IVL = 1;
 
-    // http://nanomsg.org/v0.4/nn_pubsub.7.html
+    // http://nanomsg.org/v0.7/nn_pubsub.7.html
     var SUB_SUBSCRIBE   = 1;
     var SUB_UNSUBSCRIBE = 2;
 
-    // http://nanomsg.org/v0.4/nn_survey.7.html
+    // http://nanomsg.org/v0.7/nn_survey.7.html
     var SURVEYOR_DEADLINE = 1;
 }

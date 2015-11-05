@@ -187,7 +187,8 @@ value hx_nn_recv(value sock, value bytes, value flags)
     } else {
         buffer b = alloc_buffer(NULL);
         buffer_append_sub(b, buf, ret);
-        val = buffer_val(b);
+        // val = buffer_val(b);
+        val = buffer_to_string(b);
     }
 
     return val;
@@ -201,7 +202,7 @@ value hx_nn_recv_all(value sock, value flags)
     val_check(flags, int);
 
     value val;
-    char* buf = NULL;
+    void* buf = NULL;
     int ret  = nn_recv(val_socket(sock), &buf, NN_MSG, val_int(flags));
     if (ret < 0) {
         nn_freemsg(buf);
@@ -209,10 +210,12 @@ value hx_nn_recv_all(value sock, value flags)
         val = alloc_int(ret);
     } else {
         buffer b = alloc_buffer(NULL);
-        buffer_append_sub(b, buf, ret);
-        val = buffer_val(b);
+        buffer_append_sub(b, (char*)buf, ret);
+        // val = buffer_val(b);
+        val = buffer_to_string(b);
         nn_freemsg(buf);
     }
+
 
     return val;
 }

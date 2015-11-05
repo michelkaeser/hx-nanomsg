@@ -32,8 +32,8 @@ class NanoSocket
     private static var _device:Socket->Socket->Void             = Loader.load("hx_nn_device", 2);
     private static var _getsockopt:Socket->Int->Int->Int        = Loader.load("hx_nn_getsockopt", 3);
     private static var _poll:Array<Socket>->Array<Socket>->Array<Socket>->Int->Dynamic = Loader.load("hx_nn_poll", 4);
-    private static var _recv:Socket->Int->NanoFlag->BytesData   = Loader.load("hx_nn_recv", 3);
-    private static var _recv_all:Socket->NanoFlag->BytesData    = Loader.load("hx_nn_recv_all", 2);
+    private static var _recv:Socket->Int->NanoFlag->String      = Loader.load("hx_nn_recv", 3);
+    private static var _recv_all:Socket->NanoFlag->String       = Loader.load("hx_nn_recv_all", 2);
     private static var _send:Socket->BytesData->Int->NanoFlag->Int = Loader.load("hx_nn_send", 4);
     private static var _setsockopt:Socket->NanoLevel->NanoOption->Dynamic->Int = Loader.load("hx_nn_setsockopt", 4);
     private static var _shutdown:Socket->Connection->Int        = Loader.load("hx_nn_shutdown", 2);
@@ -298,7 +298,7 @@ class NanoSocket
             read = Bytes.alloc(0);
         } else {
             try {
-                read = Bytes.ofData(NanoSocket._recv(this.handle, nbytes, flags));
+                read = Bytes.ofString(NanoSocket._recv(this.handle, nbytes, flags));
             } catch (ex:Dynamic) {
                 throw new NanoException(ex);
             }
@@ -326,7 +326,7 @@ class NanoSocket
         }
 
         try {
-            return Bytes.ofData(NanoSocket._recv_all(this.handle, flags));
+            return Bytes.ofString(NanoSocket._recv_all(this.handle, flags));
         } catch (ex:Dynamic) {
             throw new NanoException(ex);
         }
