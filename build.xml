@@ -17,6 +17,10 @@
         <echo>Installing required dependencies...</echo>
         <exec executable="haxelib">
             <arg value="install" />
+            <arg value="dox" />
+        </exec>
+        <exec executable="haxelib">
+            <arg value="install" />
             <arg value="hxcpp" />
         </exec>
         <exec executable="haxelib">
