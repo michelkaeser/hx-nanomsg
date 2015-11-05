@@ -50,11 +50,11 @@ class Debug
         s1.bind(addr); s2.connect(addr); s3.connect(addr);
         s2.setOption(NanoLevel.SUB, NanoOption.SUB_SUBSCRIBE, ""); // subscribe to all messages
         s3.setOption(NanoLevel.SUB, NanoOption.SUB_SUBSCRIBE, "News"); // subscribe to news messages only
-        s3.setOption(NanoLevel.SUB, NanoOption.SUB_SUBSCRIBE, "Flash"); // subscribe to news messages only
+        s3.setOption(NanoLevel.SUB, NanoOption.SUB_SUBSCRIBE, "Flash"); // subscribe to flash messages additionally
 
         s1.write(Bytes.ofString("Publication from s1 to NN_SUBs, sent via NN_PUB"));
         trace(s2.readAll());
-        trace(s3.readAll()); // would block, as only subscribed to msg starting with "News" or "Flash" arrive (Attn: it is recommended to include `\000` after the topic in sent messages)
+        // trace(s3.readAll()); // would block, as only subscribed to msg starting with "News" or "Flash" arrive (Attn: it is recommended to include `\000` after the topic in sent messages)
 
         s1.close();
         s2.close();
@@ -65,7 +65,7 @@ class Debug
         addr = "inproc://hxnn";
 
         s1.bind(addr); s2.connect(addr);
-        s1.setOption(NanoLevel.SURVEYOR, NanoOption.SURVEYOR_DEADLINE, 500); // wait half a second for votes
+        // s1.setOption(NanoLevel.SURVEYOR, NanoOption.SURVEYOR_DEADLINE, 500); // wait half a second for votes; FIXME: crashes
 
         s1.write(Bytes.ofString("Question from s1 to s2, sent by NN_SURVEYOR"));
         trace(s2.readAll());
